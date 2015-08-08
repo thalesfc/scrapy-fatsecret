@@ -19,7 +19,7 @@ class GlobalSpiderSpider(CrawlSpider):
         # follow members page
         Rule(
             LinkExtractor(
-                allow=r'member/\S+',
+                allow=r'member/[^\/\?]+$',
                 ), follow=True, callback="parse_user")
         # TODO change follow to true
     ]
