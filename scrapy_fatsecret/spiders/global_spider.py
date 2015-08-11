@@ -6,12 +6,8 @@ from scrapy_fatsecret.items import UserItem
 import re
 from urllib import unquote
 
-f = open('log.txt', 'w')
-
 
 def process_value(value):
-    print >> f, "\n"
-    print >> f, value
 
     # decode html percent chars, e.g., %3f --> /
     # for some dark reasons, this function only works
@@ -24,23 +20,13 @@ def process_value(value):
 
     if "%" in value:
         return 'http://www.fatsecret.com'
-    print >> f, value
 
     # 1st pre processing rule
     # consider facebook redirect
     rule = re.search("ReturnUrl=(.*)$", value)
     if rule:
-        print >> f, "RULE REDIRECT", rule.group(1)
         return process_value(rule.group(1))
 
-    # 2nd rule
-    # remove errors redirect
-    rule = re.search("ErrorLogUserFeedback", value)
-    if rule:
-        print >> f, "RULE ERROR", None
-        return None
-
-    print >> f, "Normal mode", value
     return value
 
 
