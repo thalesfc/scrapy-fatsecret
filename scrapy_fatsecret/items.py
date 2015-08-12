@@ -12,3 +12,6 @@ class UserItem(Item):
     id = Field()
     name = Field()
     link = Field()
+    weight_initial = Field()
+    weight_current = Field()
+    weight_target = Field()

@@ -40,18 +40,31 @@ class GlobalSpider(CrawlSpider):
                 allow=r'^(http://www\.fatsecret\.com/member/[^\/\?]+)$',
                 process_value=process_value
             ),
-            follow=True, callback="parse_user"
+            # follow=True, callback="parse_user"
+            follow=False, callback="parse_user"
         ),
 
         # 2nd rule - follow everything to get links
         # Extract all links and follow links from them
-        Rule(LinkExtractor(), follow=True)
+        # Rule(LinkExtractor(), follow=True)
+        # TODO uncomment this
     ]  # end of rules
 
     def parse_user(self, response):
         item = UserItem()
         item['id'] = response.url.split('/')[-1]
         item['name'] = response.xpath('//div[@class="NBBox"]/div/table/\
-                tr/td[2]/div/h1/text()').extract()
+                tr/td[2]/div/h1/text()').extract()[0]
         item['link'] = response.url
+        item['weight_initial'] = None
+
+        # crawling weights
+        content = response.xpath('//div[@class="NBBox"]\
+                //div[@class="bottom"][2]')
+        item['weight_initial'] = content.xpath('table/tr[1]/td[2]/\
+                text()').extract()[0]
+        item['weight_current'] = content.xpath('table/tr[2]/td[2]/\
+                text()').extract()[0]
+        item['weight_target'] = content.xpath('table/tr[3]/td[2]/\
+                text()').extract()[0]
         return item
