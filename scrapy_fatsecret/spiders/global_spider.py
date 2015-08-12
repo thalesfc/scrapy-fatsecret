@@ -18,9 +18,6 @@ def process_value(value):
         count += 1
         value = unquote(unquote(value))
 
-    if "%" in value:
-        return 'http://www.fatsecret.com'
-
     # 1st pre processing rule
     # consider facebook redirect
     rule = re.search("ReturnUrl=(.*)$", value)
@@ -43,14 +40,12 @@ class GlobalSpider(CrawlSpider):
                 allow=r'^(http://www\.fatsecret\.com/member/[^\/\?]+)$',
                 process_value=process_value
             ),
-            follow=False, callback="parse_user"
-        )
+            follow=True, callback="parse_user"
+        ),
 
         # 2nd rule - follow everything to get links
         # Extract all links and follow links from them
-        # (If "allow" is not given, it will match all links.)
-        # Rule(LinkExtractor(), follow=True),
-        # TODO uncomment this
+        Rule(LinkExtractor(), follow=True)
     ]  # end of rules
 
     def parse_user(self, response):
@@ -59,4 +54,4 @@ class GlobalSpider(CrawlSpider):
         item['name'] = response.xpath('//div[@class="NBBox"]/div/table/\
                 tr/td[2]/div/h1/text()').extract()
         item['link'] = response.url
-        yield item
+        return item
