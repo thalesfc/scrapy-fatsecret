@@ -5,9 +5,17 @@ import json
 
 class ValidDataPipeLine(object):
     def process_item(self, item, spider):
-        for field, value in item.items():
-            if not value:  # null or empty string
+        # valid test
+        for field in spider.crawler.settings.\
+                get('ITEM_VALID_TESTED_FIELDS'):
+            if not item[field]:
                 raise DropItem("Missing %s in %s" % (field, item))
+
+        for field, value in item.items():
+            # get first element of list
+            if isinstance(value, list):
+                if value:
+                    item[field] = value[0]
         return item
 
 

@@ -15,3 +15,6 @@ class UserItem(Item):
     weight_initial = Field()
     weight_current = Field()
     weight_target = Field()
+    regime_following = Field()
+    regime_performance = Field()
+    description = Field()
