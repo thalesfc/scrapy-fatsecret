@@ -98,5 +98,5 @@ docs/_build/
 target/
 
 # my definitions
-user.json
+*.json
 log.txt
