@@ -31,4 +31,5 @@ class PostItem(Item):
     diet_status = Field()
     diet_current = Field()
     comments = Field()
+    # TODO include html
     # html = Field()
