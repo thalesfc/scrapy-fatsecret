@@ -38,13 +38,13 @@ class GlobalSpider(CrawlSpider):
         Rule(
             LinkExtractor(
                 allow=r'^(http://www\.fatsecret\.com/member/[^\/\?]+)$',
+                deny=r'Auth\.aspx',
                 process_value=process_value
             ),
-            # follow=True, callback="parse_user"
-            follow=False, callback="parse_user"
+            follow=True, callback="parse_user"
         ),
 
-        # 2nd rule - follow everything to get links
+        # 5th rule - follow everything to get links
         # Extract all links and follow links from them
         # Rule(LinkExtractor(), follow=True)
         # TODO uncomment this
