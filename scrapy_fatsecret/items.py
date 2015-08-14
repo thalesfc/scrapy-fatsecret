@@ -18,3 +18,17 @@ class UserItem(Item):
     regime_following = Field()
     regime_performance = Field()
     description = Field()
+
+
+class PostItem(Item):
+    id = Field()
+    link = Field()
+    user_id = Field()
+    date = Field()
+    text = Field()
+    weight_current = Field()
+    weight_lost_sofar = Field()
+    diet_status = Field()
+    diet_current = Field()
+    comments = Field()
+    # html = Field()
