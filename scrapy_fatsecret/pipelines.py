@@ -8,17 +8,21 @@ def item_name(item):
 
 
 class ValidDataPipeLine(object):
+    ''' check for valid fields and for list elements return
+    the first element'''
     def process_item(self, item, spider):
         # valid test
         fields = spider.crawler.settings\
-            .get('ITEM_SETTINGS')[item_name(item)]['TESTED_FIELDS']
+            .get('ITEM_SETTINGS')[item_name(item)]['FIELD_VALIDATION']
+        use_as_list = set(spider.crawler.settings.get('ITEM_SETTINGS')[
+            item_name(item)]['FIELD_AS_LIST'])
         for field in fields:
             if not item[field]:
                 raise DropItem("Missing %s in %s" % (field, item))
 
         for field, value in item.items():
             # get first element of list
-            if isinstance(value, list):
+            if isinstance(value, list) and field not in use_as_list:
                 if value:
                     item[field] = value[0]
         return item
@@ -40,4 +44,5 @@ class JsonWriterPipeline(object):
         return item
 
     def close_spider(self, spider):
-        self.f.close()
+        for f in self.files.values():
+            f.close()
