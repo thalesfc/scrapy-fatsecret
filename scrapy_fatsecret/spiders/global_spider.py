@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
-from scrapy_fatsecret.items import UserItem
-from scrapy_fatsecret.helpers import posts
+from scrapy_fatsecret.helpers import users, posts
 
 import re
 from urllib import unquote
@@ -31,20 +30,19 @@ def process_value(value):
 class GlobalSpider(CrawlSpider):
     name = 'global_spider'
     allowed_domains = ['fatsecret.com']
-    start_urls = ['http://www.fatsecret.com/member/dorindam59/journal']
+    start_urls = ['http://www.fatsecret.com/member/dorindam59']
     # TODO change start url
 
     rules = [
-        # TODO uncomment this
         # 1st rule - members page
-        # Rule(
-        #     LinkExtractor(
-        #         allow=r'^(http://www\.fatsecret\.com/member/[^\/\?]+)$',
-        #         deny=r'Auth\.aspx',
-        #         process_value=process_value
-        #     ),
-        #     follow=True, callback="parse_user"
-        # ),
+        Rule(
+            LinkExtractor(
+                allow='^http\:\/\/www\.fatsecret\.com\/member\/[^\/\?]+$',
+                deny='Auth\.aspx',
+                process_value=process_value
+            ),
+            follow=True, callback=users.parse_user
+        ),
 
         # 2nd rule - posts: scrapy user journal posts
         Rule(
@@ -55,26 +53,3 @@ class GlobalSpider(CrawlSpider):
             follow=True
         )
     ]  # end of rules
-
-    def parse_user(self, response):
-        item = UserItem()
-        item['id'] = response.url.split('/')[-1]
-        item['name'] = response.xpath('//div[@class="NBBox"]/div/table/\
-                tr/td[2]/div/h1/text()').extract()
-        item['link'] = response.url
-
-        # crawling regime information
-        content = response.xpath('//div[@class="NBBox"]\
-                //div[@class="bottom"][2]')
-        item['weight_initial'] = content.xpath('table/tr[1]/td[2]/\
-                text()').extract()
-        item['weight_current'] = content.xpath('table/tr[2]/td[2]/\
-                text()').extract()
-        item['weight_target'] = content.xpath('table/tr[3]/td[2]/\
-                text()').extract()
-        item['regime_following'] = content.xpath('a[1]/text()')\
-            .extract()
-        item['regime_performance'] = content.xpath('a[2]/text()')\
-            .extract()
-        item['description'] = content.xpath('div').extract()
-        return item
