@@ -95,7 +95,7 @@ ITEM_PIPELINES = {
 
 # my definitions
 # does not allow 302 redirect
-# REDIRECT_ENABLED = False
+REDIRECT_ENABLED = False
 
 import items
 
