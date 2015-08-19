@@ -24,7 +24,7 @@ NEWSPIDER_MODULE = 'scrapy_fatsecret.spiders'
 # Log configurations
 # LOG_FILE = 'log.txt'
 LOG_LEVEL = 'DEBUG'
-LOG_STDOUT = True
+# LOG_STDOUT = True
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings
