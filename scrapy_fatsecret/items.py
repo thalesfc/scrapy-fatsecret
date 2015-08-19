@@ -31,4 +31,5 @@ class PostItem(Item):
     diet_status = Field()
     diet_current = Field()
     diet_entry = Field()
+    likes = Field()
     comments = Field()

@@ -71,7 +71,13 @@ def parse_post(response):
         'carb': food_info.group(3) if food_info else None
     }
 
-    # full html
+    # likes
+    base_url = 'http://www.fatsecret.com/ajax/FeedSupporters.aspx'
+    params = {'id': item['id'], 'tid': '2'}
+    import requests
+    r = requests.get(base_url, params)
+    item['likes'] = re.findall('>(\S+)<\/a>', r.content)
+
     # TODO include html
     # item['html'] = response.body
 
