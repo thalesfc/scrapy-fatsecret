@@ -51,6 +51,26 @@ def parse_post(response):
         comments.append(comment)
     item['comments'] = comments
 
+    # calendar entry
+    kcal = response.xpath('//table[@class="generic"][3]//a[1]\
+        /text()').extract()
+    food_status = response.xpath('normalize-space(//\
+            table[@class="generic"]/tr/td[@class="smallText"][2]\
+            /text())').extract()
+    food_info = None
+    if food_status and food_status[0]:
+        food_info = re.search((
+            "Fat: (\d+\.\d+\S+) \| "
+            "Prot: (\d+\.\d+\S+) \| "
+            "Carb: (\d+\.\d+\S+)\."), food_status[0])
+
+    item['diet_entry'] = {
+        'calories': kcal[0] if kcal else None,
+        'fat': food_info.group(1) if food_info else None,
+        'prot': food_info.group(2) if food_info else None,
+        'carb': food_info.group(3) if food_info else None
+    }
+
     # full html
     # TODO include html
     # item['html'] = response.body

@@ -30,6 +30,5 @@ class PostItem(Item):
     weight_lost_sofar = Field()
     diet_status = Field()
     diet_current = Field()
+    diet_entry = Field()
     comments = Field()
-    # TODO include html
-    # html = Field()
