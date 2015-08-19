@@ -26,16 +26,20 @@ def parse_post(response):
     content = response.xpath('//table[@class="generic breakout"]')
     item['text'] = content.xpath('normalize-space(tr/td/div[2]/text())')\
         .extract()
-    item['weight_current'] = content.xpath('tr/td/div[3]/table/tr/\
-            td[2]/span[1]/text()').extract()
-    item['weight_lost_sofar'] = content.xpath('tr/td/div[3]/table/tr/\
-            td[2]/span[2]/b/text()').extract()
-    item['diet_status'] = content.xpath('normalize-space(tr/td/div[3]\
+    item['weight'] = {
+        'current': content.xpath('tr/td/div[3]/table/tr/td[2]\
+                /span[1]/text()').extract(),
+        'lost_sofar': content.xpath('tr/td/div[3]/table/tr/\
+                td[2]/span[2]/b/text()').extract()
+    }
+
+    diet_status = content.xpath('normalize-space(tr/td/div[3]\
             /table/tr/td[2]/text()[4])').extract()
-    if item['diet_status']:
-        item['diet_status'] = item['diet_status'][0].strip()
-    item['diet_current'] = content.xpath('normalize-space(tr/td/div[3]\
+    item['diet'] = {
+        'status': diet_status[0].strip() if diet_status else None,
+        'name':  content.xpath('normalize-space(tr/td/div[3]\
             //div[@class="smallText"][2]/a/text())').extract()
+    }
 
     # comments
     comments_xpath = response.xpath('//tr[@class="listrow"]/td')
@@ -64,11 +68,18 @@ def parse_post(response):
             "Prot: (\d+\.\d+\S+) \| "
             "Carb: (\d+\.\d+\S+)\."), food_status[0])
 
-    item['diet_entry'] = {
+    item['food'] = {
         'calories': kcal[0] if kcal else None,
         'fat': food_info.group(1) if food_info else None,
         'prot': food_info.group(2) if food_info else None,
         'carb': food_info.group(3) if food_info else None
+    }
+
+    item['exercise'] = {
+        'calories': response.xpath('//table[@class="generic"][4]/tr/td\
+                /a/text()').extract(),
+        'text': response.xpath('normalize-space(\
+                //table[@class="generic"][4]/tr/td[3])').extract()
     }
 
     # likes
