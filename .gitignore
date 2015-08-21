@@ -100,3 +100,4 @@ target/
 # my definitions
 *.json
 log.txt
+config.py
