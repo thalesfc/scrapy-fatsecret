@@ -68,18 +68,24 @@ def parse_post(response):
             "Prot: (\d+\.\d+\S+) \| "
             "Carb: (\d+\.\d+\S+)\."), food_status[0])
 
+    food_text = response.xpath('normalize-space(//table\
+            [@class="generic breakout"]//tr[@valign="top"][1])').extract()
     item['food'] = {
         'calories': kcal[0] if kcal else None,
         'fat': food_info.group(1) if food_info else None,
         'prot': food_info.group(2) if food_info else None,
-        'carb': food_info.group(3) if food_info else None
+        'carb': food_info.group(3) if food_info else None,
+        'text': food_text[0].replace(unichr(160), " ")
+        if food_text else None
     }
 
+    exercise_text = response.xpath('normalize-space(//table\
+            [@class="generic breakout"]//tr[@valign="top"][2])').extract()
     item['exercise'] = {
         'calories': response.xpath('//table[@class="generic"][4]/tr/td\
                 /a/text()').extract(),
-        'text': response.xpath('normalize-space(\
-                //table[@class="generic"][4]/tr/td[3])').extract()
+        'text': exercise_text[0].replace(unichr(160), " ")
+        if exercise_text else None
     }
 
     # likes
