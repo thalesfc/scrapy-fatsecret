@@ -16,7 +16,7 @@ class GlobalSpider(CrawlSpider):
             LinkExtractor(
                 allow='^http\:\/\/www\.fatsecret\.com\/member\/[^\/\?]+$'
             ),
-            follow=False, callback=users.parse_user
+            follow=True, callback=users.parse_user
         ),
 
         # 2nd rule - posts: scrapy user journal posts
