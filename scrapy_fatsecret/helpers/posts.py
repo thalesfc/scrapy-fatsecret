@@ -1,5 +1,6 @@
 from scrapy_fatsecret.items import PostItem
 from scrapy import Request
+from scrapy_fatsecret.helpers import common_lib
 import re
 
 
@@ -17,8 +18,7 @@ def parse_post(response):
     item = PostItem()
     item['id'] = re.search("id=(\d+)", response.url).group(1)
     item['link'] = response.url
-    item['user_id'] = response.xpath('//div[@class="breadcrumb_link"][3]\
-            /a/@title').extract()
+    item['user_id'] = common_lib.get_user_id(response)
     item['date'] = response.xpath('//div[@class="breadcrumb_noLink"]/\
             text()').extract()
 
