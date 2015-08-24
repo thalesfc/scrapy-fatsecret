@@ -12,4 +12,4 @@ def parse_buddy(response):
         b.xpath('normalize-space(text())').extract()
         for b in buddies
     ]
-    return item
+    yield item
