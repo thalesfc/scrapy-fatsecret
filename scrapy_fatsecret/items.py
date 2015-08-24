@@ -32,3 +32,9 @@ class PostItem(Item):
     food = Field()
     exercise = Field()
     likes = Field()
+
+
+class BuddyItem(Item):
+    id = Field()
+    user_id = Field()
+    buddies = Field()

@@ -17,6 +17,8 @@ NEWSPIDER_MODULE = 'scrapy_fatsecret.spiders'
 # Crawl responsibly by identifying yourself (and your website) on the
 # user-agent
 # USER_AGENT = 'scrapy_fatsecret (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; rv:32.0) \
+        Gecko/20100101 Firefox/32.0'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS=32
@@ -96,7 +98,7 @@ ITEM_PIPELINES = {
 
 # my definitions
 # does not allow 302 redirect
-REDIRECT_ENABLED = False
+REDIRECT_ENABLED = True
 
 import items
 
@@ -110,5 +112,12 @@ ITEM_SETTINGS = {
         'FILENAME': 'post.json',
         'FIELD_VALIDATION': ['id', 'user_id', 'date'],
         'FIELD_AS_LIST': ['comments', 'likes']
+    },
+    items.BuddyItem: {
+        'FILENAME': 'buddy.json',
+        'FIELD_VALIDATION': ['id', 'user_id'],
+        'FIELD_AS_LIST': ['buddies']
     }
 }
+
+# COOKIES_DEBUG = True
