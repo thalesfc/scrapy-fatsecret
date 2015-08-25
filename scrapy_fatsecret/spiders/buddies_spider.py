@@ -4,14 +4,11 @@ from scrapy import FormRequest, Request
 import config
 import logging
 from scrapy_fatsecret.helpers import buddies
-from scrapy_fatsecret.common_lib import deprecated
 
 
-@deprecated
-class LoginSpider(CrawlSpider):
-    name = 'login_spider'
+class BuddiesSpider(CrawlSpider):
+    name = 'buddies_spider'
     allowed_domains = ['fatsecret.com']
-    login_url = 'https://www.fatsecret.com/Auth.aspx?pa=s'
     start_urls = ['http://www.fatsecret.com/member/alphamares']
 
     rules = [
