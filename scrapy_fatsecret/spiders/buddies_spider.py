@@ -4,8 +4,10 @@ from scrapy import FormRequest, Request
 import config
 import logging
 from scrapy_fatsecret.helpers import buddies
+from scrapy_fatsecret.common_lib import deprecated
 
 
+@deprecated
 class LoginSpider(CrawlSpider):
     name = 'login_spider'
     allowed_domains = ['fatsecret.com']
