@@ -117,6 +117,11 @@ ITEM_SETTINGS = {
         'FILENAME': 'buddy.json',
         'FIELD_VALIDATION': ['id', 'user_id'],
         'FIELD_AS_LIST': ['buddies']
+    },
+    items.FoodDiary: {
+        'FILENAME': 'food.json',
+        'FIELD_VALIDATION': ['id', 'user_id', 'food', 'date'],
+        'FIELD_AS_LIST': ['dishes']
     }
 }
 

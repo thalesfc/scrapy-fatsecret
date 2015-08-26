@@ -38,3 +38,12 @@ class BuddyItem(Item):
     id = Field()
     user_id = Field()
     buddies = Field()
+
+
+class FoodDiary(Item):
+    id = Field()
+    user_id = Field()
+    date = Field()
+    link = Field()
+    food = Field()
+    dishes = Field()
