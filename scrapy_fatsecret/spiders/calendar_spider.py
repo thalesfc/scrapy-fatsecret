@@ -3,19 +3,7 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy import FormRequest, Request
 import config
 import logging
-import re
 from scrapy_fatsecret.helpers import calendar
-
-
-def stub_process_member_page(response):
-    url = LinkExtractor(allow='pa=mdcs(\&|$)').extract_links(response)
-    if not url:
-        logging.log(logging.ERROR, "View Diet not found, on " + response.url)
-    else:
-        url = url[0].url
-        id = re.search('id=(\d+)', url).group(1)
-        yield Request('http://www.fatsecret.com/Diary.aspx?pa=mdc&id='
-                      + id, priority=8)
 
 
 class CalendarSpider(CrawlSpider):
@@ -31,7 +19,7 @@ class CalendarSpider(CrawlSpider):
                 deny='inweb'
             ),
             follow=True,
-            callback=stub_process_member_page
+            callback=calendar.process_member_page
         ),
 
         # enter calendar page

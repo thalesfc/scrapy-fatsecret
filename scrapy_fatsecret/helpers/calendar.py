@@ -1,6 +1,20 @@
 from scrapy_fatsecret.items import FoodDiary
 from scrapy_fatsecret import common_lib
+from scrapy.linkextractors import LinkExtractor
+from scrapy import Request
 import logging
+import re
+
+
+def process_member_page(response):
+    url = LinkExtractor(allow='pa=mdcs(\&|$)').extract_links(response)
+    if not url:
+        logging.log(logging.ERROR, "View Diet not found, on " + response.url)
+    else:
+        url = url[0].url
+        id = re.search('id=(\d+)', url).group(1)
+        yield Request('http://www.fatsecret.com/Diary.aspx?pa=mdc&id='
+                      + id, priority=8)
 
 
 def parse_food_diary(response):
