@@ -25,19 +25,21 @@ class CalendarSpider(CrawlSpider):
     start_urls = ['http://www.fatsecret.com/member/dorindam59']
 
     rules = [
-        # Rule(
-        #     LinkExtractor(
-        #         allow='^http\:\/\/www\.fatsecret\.com\/member\/[^\/\?]+$'
-        #     ),
-        #     follow=False, callback=stub_process_member_page
-        # ),
+        Rule(
+            LinkExtractor(
+                allow='member\/[^\/\?]+$',
+                deny='inweb'
+            ),
+            follow=True,
+            callback=stub_process_member_page
+        ),
 
         # enter calendar page
         Rule(
             LinkExtractor(
                 allow='pa=mdc($|\&)'
             ),
-            follow=True,  # TODO change to True
+            follow=True
         ),
 
         # enter food diary page
@@ -64,7 +66,7 @@ class CalendarSpider(CrawlSpider):
     def after_login(self, response):
         if response.url == 'https://www.fatsecret.com/Default.aspx?pa=m':
             self.log('Successfully LOGGED.', logging.INFO)
-            return [Request(url=u, callback=stub_process_member_page)
+            return [Request(url=u)
                     for u in self.start_urls]
         else:
             self.log('LOGIN error: ' + response.url, logging.CRITICAL)
