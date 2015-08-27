@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
-from scrapy_fatsecret.helpers import users, posts, buddies
+from scrapy_fatsecret.helpers import users, posts, buddies, calendar
 from scrapy import FormRequest, Request
 import config
 import logging
@@ -20,7 +20,8 @@ class GlobalSpider(CrawlSpider):
                 allow='^http\:\/\/www\.fatsecret\.com\/member\/[^\/\?]+$',
                 deny='inweb'  # deny my own user
             ),
-            follow=True, callback=users.parse_user
+            follow=True,
+            callback='parse_member'
         ),
 
         # 2nd rule - posts: scrapy user journal posts
@@ -37,8 +38,30 @@ class GlobalSpider(CrawlSpider):
             LinkExtractor(allow='pa=memb', deny='(order=|pg=0)'),
             follow=True,
             callback=buddies.parse_buddy
+        ),
+
+        # 4th rule [LOGGED, MAIN_PAGE] - diary: go to main dairy page
+        Rule(
+            LinkExtractor(
+                allow='pa=mdc($|\&)'
+            ),
+            follow=True
+        ),
+
+        # 5th rule [LOGGED] - food diary
+        Rule(
+            LinkExtractor(allow='pa=fj($|\&)'),
+            follow=False,
+            callback=calendar.parse_food_diary
         )
     ]  # end of rules
+
+    def parse_member(self, response):
+        # scrapy members info
+        yield users.parse_user(response)
+
+        # scrapy diary page
+        yield calendar.process_member_page(response)
 
     # start request is used to process files instead of start_urls
     # we are using it to log our spider on the website
