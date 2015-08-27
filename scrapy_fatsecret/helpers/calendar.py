@@ -13,8 +13,8 @@ def process_member_page(response):
     else:
         url = url[0].url
         id = re.search('id=(\d+)', url).group(1)
-        yield Request('http://www.fatsecret.com/Diary.aspx?pa=mdc&id='
-                      + id, priority=8)
+        return Request('http://www.fatsecret.com/Diary.aspx?pa=mdc&id='
+                       + id, priority=8)
 
 
 def parse_food_diary(response):
