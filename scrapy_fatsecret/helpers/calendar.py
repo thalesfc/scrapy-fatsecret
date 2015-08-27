@@ -48,4 +48,7 @@ def parse_food_diary(response):
 
     item['dishes'] = dishes
 
+    item['rdi'] = response.xpath('normalize-space(//div[@class="big"]\
+            /text())').extract()
+
     return item

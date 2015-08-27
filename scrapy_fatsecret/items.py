@@ -47,3 +47,4 @@ class FoodDiary(Item):
     link = Field()
     food = Field()
     dishes = Field()
+    rdi = Field()
