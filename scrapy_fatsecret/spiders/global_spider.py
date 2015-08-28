@@ -53,13 +53,19 @@ class GlobalSpider(CrawlSpider):
             LinkExtractor(allow='pa=fj($|\&)'),
             follow=False,
             callback=calendar.parse_food_diary
-        )
+        ),
+
+        # 6th rule [LOGGED] - exercise diary
+        Rule(
+            LinkExtractor(allow='pa=aj($|\&)'),
+            follow=False,
+            callback=calendar.parse_exercise_diary
+        ),
     ]  # end of rules
 
     def parse_member(self, response):
         # scrapy members info
         yield users.parse_user(response)
-
         # scrapy diary page
         yield calendar.process_member_page(response)
 
