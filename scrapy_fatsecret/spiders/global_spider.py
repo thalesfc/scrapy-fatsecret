@@ -17,7 +17,7 @@ class GlobalSpider(CrawlSpider):
         # 1st rule - members page
         Rule(
             LinkExtractor(
-                allow='^http\:\/\/www\.fatsecret\.com\/member\/[^\/\?]+$',
+                allow='member\/[^\/\?]+$',
                 deny='inweb'  # deny my own user
             ),
             follow=True,
