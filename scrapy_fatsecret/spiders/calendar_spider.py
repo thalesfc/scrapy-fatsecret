@@ -31,10 +31,17 @@ class CalendarSpider(CrawlSpider):
         ),
 
         # enter food diary page
+        # Rule(
+        #     LinkExtractor(allow='pa=fj($|\&)'),
+        #     follow=False,
+        #     callback=calendar.parse_food_diary
+        # )
+
+        # enter exercise diary page
         Rule(
-            LinkExtractor(allow='pa=fj($|\&)'),
+            LinkExtractor(allow='pa=aj($|\&)'),
             follow=False,
-            callback=calendar.parse_food_diary
+            callback=calendar.parse_exercise_diary
         )
     ]
 

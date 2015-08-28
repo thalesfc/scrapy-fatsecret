@@ -48,3 +48,12 @@ class FoodDiary(Item):
     food = Field()
     dishes = Field()
     rdi = Field()
+
+
+class ExerciseDiary(Item):
+    id = Field()
+    user_id = Field()
+    date = Field()
+    link = Field()
+    summary = Field()
+    exercises = Field()

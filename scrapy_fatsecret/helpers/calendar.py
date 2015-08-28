@@ -1,4 +1,4 @@
-from scrapy_fatsecret.items import FoodDiary
+from scrapy_fatsecret.items import FoodDiary, ExerciseDiary
 from scrapy_fatsecret import common_lib
 from scrapy.linkextractors import LinkExtractor
 from scrapy import Request
@@ -64,5 +64,51 @@ def parse_food_diary(response):
 
     item['rdi'] = response.xpath('normalize-space(//div[@class="big"]\
             /text())').extract()
+
+    return item
+
+
+def parse_exercise_diary(response):
+    item = ExerciseDiary()
+
+    item['id'] = common_lib.get_page_id(response)
+    item['user_id'] = common_lib.get_user_id(response)
+    item['link'] = response.url
+    item['date'] = response.xpath('normalize-space(\
+            //div[@class="subtitle"]/text())').extract()
+
+    summary_data = response.xpath('\
+            //table[@class="generic activityValuesTbl"]\
+            //td[@class="sub"]/text()').extract()
+    if len(summary_data) < 2:
+        logging.log(logging.WARNING, "Exercise summary data not found for\
+                page %s." % response.url)
+    else:
+        item['summary'] = {
+            'time_spent': summary_data[0],
+            'calc': summary_data[1]
+        }
+
+    exercises_xpath = response.xpath('//tr[starts-with(@id, "infsec")]')
+    exercises = []
+    for e in exercises_xpath:
+        time_spent_1 = e.xpath('.//div[@class=" activityCell bTop"]\
+                /text()').extract()
+        time_spent_2 = e.xpath('.//div[@class="activityCell bLeft bTop"]\
+                /a/b/text()').extract()
+        time_spent_3 = e.xpath('.//div[@class="activityCell bTop"]\
+                /text()').extract()
+
+        time_spent = (time_spent_1 if time_spent_1
+                      else (time_spent_2 if time_spent_2 else time_spent_3))
+        exercise = {
+            'name': e.xpath('.//b/text()').extract()[0],
+            'time_spent': time_spent[0],
+            'cals': e.xpath('.//div[@class="activityCell bTop bRight"]\
+                    /text()').extract()[0]
+        }
+
+        exercises.append(exercise)
+    item['exercises'] = exercises
 
     return item
